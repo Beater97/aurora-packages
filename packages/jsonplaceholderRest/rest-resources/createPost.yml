@@ -1,0 +1,7 @@
+kind: rest_resource
+id: jsonplaceholderRest.rest.createPost
+method: POST
+path: /posts
+flowservice: jsonplaceholderRest.flows.createPost
+name: Create Post
+alias: jsonplaceholder

@@ -1,0 +1,13 @@
+kind: flowservice
+id: jsonplaceholderRest.flows.listPosts
+name: List All Posts from JSONPlaceholder
+pipeline:
+  - http.get:
+      url: https://jsonplaceholder.typicode.com/posts
+      headers:
+        Accept: application/json
+    name: fetchPosts
+  - map:
+      mappings:
+        - expression: "${steps.fetchPosts}"
+          to: output

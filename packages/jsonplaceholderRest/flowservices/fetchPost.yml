@@ -1,0 +1,20 @@
+kind: flowservice
+id: jsonplaceholderRest.flows.fetchPost
+name: Fetch Single Post by ID
+pipeline:
+  - http.get:
+      url: "https://jsonplaceholder.typicode.com/posts/${request.path_params.id}"
+      headers:
+        Accept: application/json
+    name: fetchPost
+  - if:
+      condition: "${steps.fetchPost.statusCode == 200}"
+      then:
+        - map:
+            mappings:
+              - expression: "${steps.fetchPost}"
+                to: output
+      else:
+        - throw:
+            error: "Post not found"
+            status_code: 404
