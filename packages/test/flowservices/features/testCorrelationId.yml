@@ -1,0 +1,16 @@
+kind: flowservice
+id: test.features.testCorrelationId
+name: Test Correlation ID
+pipeline:
+
+  # Shows the correlationId available in meta.
+  # When any HTTP service step runs, X-Correlation-Id is automatically
+  # injected in the outbound request headers (via context.correlationId).
+  - map:
+      mappings:
+        - expression: "${meta.correlationId}"
+          to: output.correlationId
+        - expression: "${meta.triggerType}"
+          to: output.triggerType
+        - value: "X-Correlation-Id auto-injected in all outbound HTTP calls"
+          to: output.httpPropagation

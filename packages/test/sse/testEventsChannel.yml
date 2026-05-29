@@ -1,0 +1,4 @@
+kind: sse_resource
+id: test.sse.events
+name: Test Events SSE Channel
+channel: test.events

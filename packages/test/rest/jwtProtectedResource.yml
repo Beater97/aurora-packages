@@ -1,0 +1,14 @@
+kind: rest_resource
+id: test.rest.oauth2Protected
+method: GET
+path: /test/oauth2-protected
+name: OAuth2 Protected Resource (requires Bearer token with scope)
+flowservice: test.features.testJwtProtected
+auth:
+  type: oauth2
+  scopes:
+    - test:read
+input:
+  oauth2_sub: request.oauth2_claims.sub
+  oauth2_scopes: request.oauth2_claims.scope
+  oauth2_client: request.oauth2_claims.client_id

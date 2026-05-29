@@ -1,0 +1,13 @@
+kind: python_service
+id: test.services.slow.sleep
+name: Sleep (delays execution by N seconds)
+script: services/slow/sleep.py
+input:
+  seconds:
+    type: number
+    required: false
+output:
+  value:
+    type: string
+  slept_seconds:
+    type: number

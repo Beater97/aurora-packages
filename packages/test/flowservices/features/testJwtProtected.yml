@@ -1,0 +1,27 @@
+kind: flowservice
+id: test.features.testJwtProtected
+name: OAuth2 Protected Resource
+input:
+  oauth2_sub:
+    type: string
+    required: false
+  oauth2_scopes:
+    type: string
+    required: false
+  oauth2_client:
+    type: string
+    required: false
+pipeline:
+
+  - map:
+      mappings:
+        - value: "Access granted — you are authenticated!"
+          to: output.message
+        - expression: "${input.oauth2_sub or 'unknown'}"
+          to: output.authenticatedAs
+        - expression: "${input.oauth2_client or 'unknown'}"
+          to: output.clientId
+        - expression: "${input.oauth2_scopes or ''}"
+          to: output.scopes
+        - expression: "${meta.correlationId}"
+          to: output.correlationId

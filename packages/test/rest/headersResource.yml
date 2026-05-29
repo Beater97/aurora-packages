@@ -1,0 +1,12 @@
+kind: rest_resource
+id: test.resources.headers
+name: Test Response Headers
+method: GET
+path: /test/headers
+flowservice: test.features.testHeaders
+response:
+  status: 200
+  headers:
+    X-Correlation-Id: "${output.correlationId}"
+    X-Generated-At: "${output.generatedAt}"
+    X-Aurora-Test: "response-headers-ok"

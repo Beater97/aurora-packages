@@ -1,0 +1,6 @@
+kind: rest_resource
+id: test.rest.retryYaml
+method: GET
+path: /test/retry-yaml
+name: Test YAML-only retry (no Python service)
+flowservice: test.features.testRetryYaml

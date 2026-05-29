@@ -1,0 +1,9 @@
+kind: git_source
+id: example.repo
+url: https://github.com/example/repo.git
+branch: main
+poll_interval_seconds: 0
+packages_subfolder: packages
+auth:
+  type: token
+  token: "${env.GIT_TOKEN}"

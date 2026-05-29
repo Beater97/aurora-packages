@@ -1,0 +1,11 @@
+kind: rest_resource
+id: test.resources.dataTransform
+name: Test XML / CSV / Regex Services
+method: POST
+path: /test/data-transform
+flowservice: test.features.testDataTransform
+input:
+  csv_input: request.body.csv_input
+  xml_input: request.body.xml_input
+response:
+  status: 200

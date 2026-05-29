@@ -1,0 +1,28 @@
+kind: flowservice
+id: test.features.testRetry
+name: Test Retry Policy
+input:
+  fail_until:
+    type: integer
+    required: false
+pipeline:
+
+  # flakyEcho fails on attempts < fail_until, then succeeds.
+  # retry config: 3 attempts, 0.2s delay, linear backoff.
+  - service:
+      id: test.services.retry.flakyEcho
+      input:
+        fail_until: "${input.fail_until or 2}"
+        value: "hello from retry test"
+      output:
+        value: output.echoValue
+        succeeded_on_attempt: output.succeededOnAttempt
+    name: flakyStep
+    retry:
+      max_attempts: 3
+      delay_seconds: 0.2
+      backoff: linear
+
+  - set:
+      path: output.status
+      value: "retry succeeded"

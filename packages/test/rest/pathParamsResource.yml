@@ -1,0 +1,10 @@
+kind: rest_resource
+id: test.resources.pathParams
+name: Test Path Parameters
+method: GET
+path: /test/users/{userId}
+flowservice: test.features.testPathParams
+input:
+  userId: request.path_params.userId
+response:
+  status: 200

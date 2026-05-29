@@ -1,0 +1,7 @@
+kind: queue_consumer
+id: test.queue.processor
+name: Test Internal Queue Processor
+broker: internal
+queue: test.internal.queue
+flowservice: test.features.processQueueMessage
+enabled: true

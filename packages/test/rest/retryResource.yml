@@ -1,0 +1,10 @@
+kind: rest_resource
+id: test.resources.retry
+name: Test Retry Policy
+method: POST
+path: /test/retry
+flowservice: test.features.testRetry
+input:
+  fail_until: request.body.fail_until
+response:
+  status: 200

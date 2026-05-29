@@ -1,0 +1,19 @@
+kind: flowservice
+id: test.features.testDlq
+name: Test DLQ - Intentional Failure with on_failure routing
+on_failure:
+  flowservice: test.features.handleTestFailure
+input:
+  message:
+    type: string
+    required: false
+pipeline:
+
+  - set:
+      path: vars.msg
+      value: "${input.message or 'intentional test error'}"
+
+  # This always throws — triggers on_failure + DLQ write
+  - throw:
+      code: TEST_DLQ_FAILURE
+      message: "${vars.msg}"

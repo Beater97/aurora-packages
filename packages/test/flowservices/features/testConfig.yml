@@ -1,0 +1,19 @@
+kind: flowservice
+id: test.features.testConfig
+name: Test Config Access
+pipeline:
+
+  - map:
+      mappings:
+        - expression: "${config.defaultMessage}"
+          to: output.message
+        - expression: "${config.maxItems}"
+          to: output.maxItems
+        - expression: "${config.featureFlag}"
+          to: output.featureFlag
+        - expression: "${config.environment}"
+          to: output.environment
+        - expression: "${config.version}"
+          to: output.version
+        - expression: "${meta.correlationId}"
+          to: output.correlationId

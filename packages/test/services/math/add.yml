@@ -1,0 +1,15 @@
+kind: python_service
+id: test.services.math.add
+name: Math Add
+script: services/math/add.py
+input:
+  a:
+    type: number
+    required: true
+  b:
+    type: number
+    required: true
+output:
+  result:
+    type: number
+    required: true

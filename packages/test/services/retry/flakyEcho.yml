@@ -1,0 +1,16 @@
+kind: python_service
+id: test.services.retry.flakyEcho
+name: Flaky Echo (fails first N-1 attempts)
+script: services/retry/flakyEcho.py
+input:
+  fail_until:
+    type: integer
+    required: false
+  value:
+    type: string
+    required: false
+output:
+  value:
+    type: string
+  succeeded_on_attempt:
+    type: integer

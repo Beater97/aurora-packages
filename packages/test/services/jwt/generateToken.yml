@@ -1,0 +1,4 @@
+kind: python_service
+id: test.services.jwt.generateToken
+name: Generate Test JWT Token
+script: services/jwt/generateToken.py

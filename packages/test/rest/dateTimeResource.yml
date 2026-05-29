@@ -1,0 +1,8 @@
+kind: rest_resource
+id: test.resources.datetime
+name: Test DateTime Services
+method: GET
+path: /test/datetime
+flowservice: test.features.testDateTime
+response:
+  status: 200

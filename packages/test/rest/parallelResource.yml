@@ -1,0 +1,8 @@
+kind: rest_resource
+id: test.resources.parallel
+name: Test Parallel Step
+method: GET
+path: /test/parallel
+flowservice: test.features.testParallel
+response:
+  status: 200

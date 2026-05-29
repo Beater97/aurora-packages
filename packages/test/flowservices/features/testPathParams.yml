@@ -1,0 +1,25 @@
+kind: flowservice
+id: test.features.testPathParams
+name: Test Path Parameters + Env Var
+input:
+  userId:
+    type: string
+    required: true
+pipeline:
+
+  # env var access
+  - set:
+      path: vars.env
+      value: "${env.APP_NAME}"
+
+  # build response
+  - map:
+      mappings:
+        - from: input.userId
+          to: output.userId
+        - value: "User lookup via path param"
+          to: output.message
+        - from: vars.env
+          to: output.appName
+        - expression: "${str(input.userId).upper()}"
+          to: output.userIdUpper

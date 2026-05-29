@@ -1,0 +1,28 @@
+kind: flowservice
+id: test.features.handleTestFailure
+name: Handle Test Failure (on_failure handler)
+input:
+  error:
+    type: object
+    required: false
+  input:
+    type: object
+    required: false
+  flowserviceId:
+    type: string
+    required: false
+  correlationId:
+    type: string
+    required: false
+pipeline:
+
+  - map:
+      mappings:
+        - expression: "${input.error.message or 'unknown error'}"
+          to: output.handledError
+        - expression: "${input.flowserviceId or 'unknown'}"
+          to: output.failedService
+        - expression: "${input.correlationId or 'unknown'}"
+          to: output.correlationId
+        - value: "on_failure handler executed successfully"
+          to: output.status

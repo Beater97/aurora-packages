@@ -1,0 +1,18 @@
+kind: flowservice
+id: test.features.schedulerHeartbeat
+name: Scheduler Heartbeat
+pipeline:
+
+  - service:
+      id: common.services.datetime.now
+      output:
+        value: vars.now
+
+  - map:
+      mappings:
+        - from: vars.now
+          to: output.firedAt
+        - value: "heartbeat"
+          to: output.type
+        - expression: "${meta.correlationId}"
+          to: output.correlationId

@@ -1,0 +1,25 @@
+kind: object
+id: test.entity.testInput.TestAllInput
+name: Test All Input
+type: object
+fields:
+  firstName:
+    type: string
+    required: true
+    description: Nome da usare nei test di trasformazione stringa e calcolo score
+  age:
+    type: number
+    required: true
+    description: Età numerica - usata in espressioni, if, switch e calcoli math
+  items:
+    type: array
+    required: true
+    description: Lista di stringhe su cui verrà eseguito il loop con uppercase
+  category:
+    type: string
+    required: true
+    description: "Valori attesi: premium → gold, basic → silver, altro → bronze"
+  failOnPurpose:
+    type: boolean
+    required: false
+    description: Se true attiva il throw nel blocco try, verificando il catch

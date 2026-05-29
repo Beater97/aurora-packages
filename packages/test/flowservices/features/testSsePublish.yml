@@ -1,0 +1,35 @@
+kind: flowservice
+id: test.features.testSsePublish
+name: Test SSE Publish
+input:
+  message:
+    type: string
+    required: false
+  channel:
+    type: string
+    required: false
+pipeline:
+
+  - set:
+      path: vars.channel
+      value: "${input.channel or 'test.events'}"
+
+  - set:
+      path: vars.payload
+      value:
+        message: "${input.message or 'Hello from Aurora SSE!'}"
+        correlationId: "${meta.correlationId}"
+
+  - publish:
+      channel: "${vars.channel}"
+      value: "${vars.payload}"
+      output_count: vars.subscriberCount
+
+  - map:
+      mappings:
+        - from: vars.subscriberCount
+          to: output.subscribersNotified
+        - from: vars.channel
+          to: output.channel
+        - value: "published"
+          to: output.status
