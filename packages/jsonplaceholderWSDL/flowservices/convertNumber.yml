@@ -1,15 +1,10 @@
 kind: flowservice
 id: jsonplaceholderWSDL.flows.convertNumber
-name: Convert Number to Words via SOAP
+name: Convert Number to Words (placeholder)
 pipeline:
-  - soap.call:
-      operation: NumberToWords
-      input:
-        bNum: "${request.body.number}"
-    name: conversion
   - map:
       mappings:
-        - expression: "${steps.conversion}"
-          to: output.result
         - expression: "${request.body.number}"
           to: output.input_number
+        - value: "SOAP integration TBD — requires common.services.soap.call"
+          to: output.message

@@ -2,17 +2,19 @@ kind: flowservice
 id: jsonplaceholderRest.flows.fetchPost
 name: Fetch Single Post by ID
 pipeline:
-  - http.get:
-      url: "https://jsonplaceholder.typicode.com/posts/${request.path_params.id}"
-      headers:
-        Accept: application/json
+  - service:
+      id: common.services.http.get
+      input:
+        url: "https://jsonplaceholder.typicode.com/posts/${request.path_params.id}"
+        headers:
+          Accept: application/json
     name: fetchPost
   - if:
-      condition: "${steps.fetchPost.statusCode == 200}"
+      condition: "${steps.fetchPost.status_code == 200}"
       then:
         - map:
             mappings:
-              - expression: "${steps.fetchPost}"
+              - expression: "${steps.fetchPost.body}"
                 to: output
       else:
         - throw:

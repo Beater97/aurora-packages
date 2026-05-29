@@ -2,15 +2,15 @@ kind: flowservice
 id: jsonplaceholderRest.flows.createPost
 name: Create New Post
 pipeline:
-  - http.post:
-      url: https://jsonplaceholder.typicode.com/posts
-      headers:
-        Content-Type: application/json
-      body: "${request.body}"
+  - service:
+      id: common.services.http.post
+      input:
+        url: https://jsonplaceholder.typicode.com/posts
+        headers:
+          Content-Type: application/json
+        body: "${request.body}"
     name: createPost
   - map:
       mappings:
-        - expression: "${steps.createPost}"
-          to: output
-        - expression: 201
-          to: output.statusCode
+        - expression: "${steps.createPost.body}"
+          to: output.created
