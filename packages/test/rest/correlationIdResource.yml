@@ -1,6 +1,10 @@
 kind: rest_resource
 id: test.rest.correlationId
-method: GET
-path: /test/correlation-id
 name: Test Correlation ID Propagation
-flowservice: test.features.testCorrelationId
+
+routes:
+  - method: GET
+    path: /test/correlation-id
+    flowservice: test.features.testCorrelationId
+    response:
+      status: 200
