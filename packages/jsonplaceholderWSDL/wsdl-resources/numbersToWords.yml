@@ -1,6 +1,0 @@
-kind: wsdl_resource
-id: jsonplaceholderWSDL.soap.numbersToWords
-path: /numberToWords
-wsdl_url: https://www.dataaccess.com/webservicesserver/NumberConversion.wso?WSDL
-flowservice: jsonplaceholderWSDL.flows.convertNumber
-name: Numbers to Words Conversion
