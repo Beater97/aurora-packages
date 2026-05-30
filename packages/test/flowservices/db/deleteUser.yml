@@ -1,0 +1,44 @@
+kind: flowservice
+id: test.db.deleteUser
+name: Delete User
+input:
+  id:
+    type: integer
+    required: true
+output:
+  message:
+    type: string
+pipeline:
+
+  - service:
+      id: common.services.database.queryOne
+      input:
+        db_alias: "main_db"
+        sql: "SELECT id FROM users WHERE id = :id"
+        params:
+          id: "${input.id}"
+      output:
+        found: vars.found
+    name: checkExists
+
+  - if:
+      condition: "${not vars.found}"
+      then:
+        - throw:
+            code: "NOT_FOUND"
+            message: "Utente non trovato"
+            status_code: 404
+
+  - service:
+      id: common.services.database.execute
+      input:
+        db_alias: "main_db"
+        sql: "DELETE FROM users WHERE id = :id"
+        params:
+          id: "${input.id}"
+    name: dbDelete
+
+  - map:
+      mappings:
+        - value: "Utente eliminato"
+          to: output.message

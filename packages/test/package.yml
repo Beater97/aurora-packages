@@ -1,3 +1,17 @@
 name: test
-version: 1.0.0
-description: Test package - verifica tutti i tipi di step e le feature transformer dell'engine
+version: 2.0.0
+description: |
+  Pacchetto di test Aurora — copre DB (query/execute), FTP (list/upload/download)
+  e processi logici (branch, loop, parallel), tutto esposto via REST.
+
+  Connettori richiesti:
+    - database: crea un'istanza connector di tipo "database" con alias "main_db"
+    - ftp:      crea un'istanza connector di tipo "ftp"      con alias "main_ftp"
+
+  Tabella DB di esempio:
+    CREATE TABLE users (
+      id      SERIAL PRIMARY KEY,
+      name    VARCHAR(100) NOT NULL,
+      email   VARCHAR(150) NOT NULL UNIQUE,
+      created_at TIMESTAMP DEFAULT NOW()
+    );

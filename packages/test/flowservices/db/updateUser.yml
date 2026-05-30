@@ -1,0 +1,63 @@
+kind: flowservice
+id: test.db.updateUser
+name: Update User
+input:
+  id:
+    type: integer
+    required: true
+  name:
+    type: string
+    required: false
+  email:
+    type: string
+    required: false
+output:
+  affected_rows:
+    type: integer
+  message:
+    type: string
+pipeline:
+
+  # Verifica che l'utente esista prima di aggiornare
+  - service:
+      id: common.services.database.queryOne
+      input:
+        db_alias: "main_db"
+        sql: "SELECT id FROM users WHERE id = :id"
+        params:
+          id: "${input.id}"
+      output:
+        found: vars.found
+    name: checkExists
+
+  - if:
+      condition: "${not vars.found}"
+      then:
+        - throw:
+            code: "NOT_FOUND"
+            message: "Utente non trovato"
+            status_code: 404
+
+  - service:
+      id: common.services.database.execute
+      input:
+        db_alias: "main_db"
+        sql: >
+          UPDATE users SET
+            name  = COALESCE(:name,  name),
+            email = COALESCE(:email, email)
+          WHERE id = :id
+        params:
+          id: "${input.id}"
+          name: "${input.name or None}"
+          email: "${input.email or None}"
+      output:
+        affected_rows: vars.affected
+    name: dbUpdate
+
+  - map:
+      mappings:
+        - from: vars.affected
+          to: output.affected_rows
+        - value: "Utente aggiornato"
+          to: output.message

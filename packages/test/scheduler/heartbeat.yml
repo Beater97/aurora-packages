@@ -1,7 +1,0 @@
-kind: scheduler
-id: test.scheduler.heartbeat
-name: Test Heartbeat
-flowservice: test.features.schedulerHeartbeat
-enabled: true
-schedule:
-  interval_seconds: 300

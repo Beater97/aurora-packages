@@ -1,0 +1,31 @@
+kind: flowservice
+id: test.ftp.listFiles
+name: FTP List Files
+input:
+  remote_path:
+    type: string
+    required: false
+    description: Percorso remoto da listare. Default = directory root.
+output:
+  files:
+    type: array
+  count:
+    type: integer
+pipeline:
+
+  - service:
+      id: common.services.ftp.listFiles
+      input:
+        ftp_alias: "main_ftp"
+        remote_path: "${input.remote_path or '/'}"
+      output:
+        files: vars.files
+        count: vars.count
+    name: ftpList
+
+  - map:
+      mappings:
+        - from: vars.files
+          to: output.files
+        - from: vars.count
+          to: output.count

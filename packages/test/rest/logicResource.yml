@@ -1,0 +1,37 @@
+kind: rest_resource
+id: test.rest.logic
+name: Logic Demos
+
+routes:
+  # POST /test/logic/branch
+  # body: { value: 75, category: "premium", trigger_error: false }
+  - method: POST
+    path: /test/logic/branch
+    flowservice: test.logic.branchDemo
+    input:
+      value: request.body.value
+      category: request.body.category
+      trigger_error: request.body.trigger_error
+    response:
+      status: 200
+
+  # POST /test/logic/loop
+  # body: { items: ["hello", "world", "aurora"] }
+  - method: POST
+    path: /test/logic/loop
+    flowservice: test.logic.loopDemo
+    input:
+      items: request.body.items
+    response:
+      status: 200
+
+  # POST /test/logic/parallel
+  # body: { a: 12, b: 4 }
+  - method: POST
+    path: /test/logic/parallel
+    flowservice: test.logic.parallelDemo
+    input:
+      a: request.body.a
+      b: request.body.b
+    response:
+      status: 200

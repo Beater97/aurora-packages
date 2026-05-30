@@ -1,0 +1,35 @@
+kind: flowservice
+id: test.db.createUser
+name: Create User
+input:
+  name:
+    type: string
+    required: true
+  email:
+    type: string
+    required: true
+output:
+  affected_rows:
+    type: integer
+  message:
+    type: string
+pipeline:
+
+  - service:
+      id: common.services.database.execute
+      input:
+        db_alias: "main_db"
+        sql: "INSERT INTO users (name, email) VALUES (:name, :email)"
+        params:
+          name: "${input.name}"
+          email: "${input.email}"
+      output:
+        affected_rows: vars.affected
+    name: dbInsert
+
+  - map:
+      mappings:
+        - from: vars.affected
+          to: output.affected_rows
+        - value: "Utente creato con successo"
+          to: output.message

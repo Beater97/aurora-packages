@@ -1,0 +1,48 @@
+kind: flowservice
+id: test.db.queryUsers
+name: Query Users
+description: Seleziona tutti gli utenti, con filtro opzionale per nome.
+input:
+  name_filter:
+    type: string
+    required: false
+    description: Filtro parziale sul nome (LIKE). Vuoto = tutti gli utenti.
+output:
+  users:
+    type: array
+  total:
+    type: integer
+pipeline:
+
+  # Costruisce la query in base al filtro
+  - if:
+      condition: "${input.name_filter and input.name_filter != ''}"
+      then:
+        - service:
+            id: common.services.database.query
+            input:
+              db_alias: "main_db"
+              sql: "SELECT id, name, email, created_at FROM users WHERE name ILIKE :filter ORDER BY id"
+              params:
+                filter: "${'%' + input.name_filter + '%'}"
+            output:
+              rows: vars.rows
+              count: vars.total
+          name: dbQuery
+      else:
+        - service:
+            id: common.services.database.query
+            input:
+              db_alias: "main_db"
+              sql: "SELECT id, name, email, created_at FROM users ORDER BY id"
+            output:
+              rows: vars.rows
+              count: vars.total
+          name: dbQuery
+
+  - map:
+      mappings:
+        - from: vars.rows
+          to: output.users
+        - from: vars.total
+          to: output.total

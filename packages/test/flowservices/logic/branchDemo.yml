@@ -1,0 +1,100 @@
+kind: flowservice
+id: test.logic.branchDemo
+name: Branch Demo (if / switch / try-catch)
+description: >
+  Dimostra if/else, switch e try/catch.
+  Passa trigger_error=true per testare il catch.
+input:
+  value:
+    type: integer
+    required: true
+    description: Numero su cui applicare la logica di branch
+  category:
+    type: string
+    required: false
+    description: "Categoria: premium | basic | altro"
+  trigger_error:
+    type: boolean
+    required: false
+    description: Se true, lancia un errore gestito dal catch
+output:
+  range_label:
+    type: string
+  category_level:
+    type: string
+  try_result:
+    type: string
+  caught_message:
+    type: string
+pipeline:
+
+  # ── IF: classifica il valore ──────────────────────────────────────────────
+  - if:
+      condition: "${input.value >= 100}"
+      then:
+        - set:
+            path: vars.range_label
+            value: "alto"
+      else:
+        - if:
+            condition: "${input.value >= 50}"
+            then:
+              - set:
+                  path: vars.range_label
+                  value: "medio"
+            else:
+              - set:
+                  path: vars.range_label
+                  value: "basso"
+
+  # ── SWITCH: livello per categoria ─────────────────────────────────────────
+  - switch:
+      value: "${input.category}"
+      cases:
+        - when: "premium"
+          do:
+            - set:
+                path: vars.category_level
+                value: "oro"
+        - when: "basic"
+          do:
+            - set:
+                path: vars.category_level
+                value: "argento"
+      default:
+        - set:
+            path: vars.category_level
+            value: "bronzo"
+
+  # ── TRY / CATCH ───────────────────────────────────────────────────────────
+  - try:
+      do:
+        - if:
+            condition: "${input.trigger_error}"
+            then:
+              - throw:
+                  code: "DEMO_ERROR"
+                  message: "Errore di test lanciato intenzionalmente"
+        - set:
+            path: vars.try_result
+            value: "success"
+      catch:
+        - set:
+            path: vars.try_result
+            value: "caught"
+        - map:
+            mappings:
+              - from: vars.error.message
+                to: vars.caught_message
+
+  # ── MAP output ────────────────────────────────────────────────────────────
+  - map:
+      mappings:
+        - from: vars.range_label
+          to: output.range_label
+        - from: vars.category_level
+          to: output.category_level
+        - from: vars.try_result
+          to: output.try_result
+        - from: vars.caught_message
+          to: output.caught_message

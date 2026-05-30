@@ -1,0 +1,74 @@
+kind: flowservice
+id: test.logic.parallelDemo
+name: Parallel Demo
+description: >
+  Esegue tre operazioni matematiche in parallelo su a e b,
+  poi le aggrega in un unico risultato.
+input:
+  a:
+    type: number
+    required: true
+  b:
+    type: number
+    required: true
+output:
+  sum:
+    type: number
+  product:
+    type: number
+  difference:
+    type: number
+  summary:
+    type: string
+pipeline:
+
+  - parallel:
+      branches:
+        - do:
+            - service:
+                id: common.services.math.add
+                input:
+                  a: "${input.a}"
+                  b: "${input.b}"
+                output:
+                  result: vars.sum
+              name: calcSum
+
+        - do:
+            - service:
+                id: common.services.math.multiply
+                input:
+                  a: "${input.a}"
+                  b: "${input.b}"
+                output:
+                  result: vars.product
+              name: calcProduct
+
+        - do:
+            - service:
+                id: common.services.math.subtract
+                input:
+                  a: "${input.a}"
+                  b: "${input.b}"
+                output:
+                  result: vars.difference
+              name: calcDiff
+
+  - service:
+      id: common.services.strings.format
+      input:
+        template: "${input.a} + ${input.b} = ${vars.sum} | ${input.a} × ${input.b} = ${vars.product} | ${input.a} - ${input.b} = ${vars.difference}"
+      output:
+        value: vars.summary
+    name: buildSummary
+
+  - map:
+      mappings:
+        - from: vars.sum
+          to: output.sum
+        - from: vars.product
+          to: output.product
+        - from: vars.difference
+          to: output.difference
+        - from: vars.summary
+          to: output.summary

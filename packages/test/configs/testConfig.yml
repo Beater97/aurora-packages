@@ -1,9 +1,0 @@
-kind: config
-id: test.config
-name: Test Package Configuration
-entries:
-  defaultMessage: "Hello from Aurora config"
-  maxItems: 100
-  featureFlag: true
-  environment: test
-  version: "1.0.0"

@@ -1,0 +1,84 @@
+kind: flowservice
+id: test.logic.loopDemo
+name: Loop Demo
+description: >
+  Itera su una lista di stringhe: converte in uppercase, calcola la lunghezza
+  di ciascuna e produce statistiche aggregate (totale caratteri, stringa più lunga).
+input:
+  items:
+    type: array
+    required: true
+    description: Lista di stringhe da elaborare
+output:
+  processed:
+    type: array
+    description: "[{original, upper, length}]"
+  total_chars:
+    type: integer
+  longest:
+    type: string
+pipeline:
+
+  - set:
+      path: vars.processed
+      value: []
+  - set:
+      path: vars.total_chars
+      value: 0
+  - set:
+      path: vars.longest
+      value: ""
+
+  - loop:
+      items: "${input.items}"
+      item: current
+      do:
+        # uppercase
+        - service:
+            id: common.services.strings.toUpperCase
+            input:
+              value: "${vars.current}"
+            output:
+              value: vars.upper
+          name: toUpper
+
+        # lunghezza
+        - service:
+            id: common.services.strings.length
+            input:
+              value: "${vars.current}"
+            output:
+              value: vars.char_len
+          name: strLen
+
+        # accumula totale caratteri
+        - service:
+            id: common.services.math.add
+            input:
+              a: "${vars.total_chars}"
+              b: "${vars.char_len}"
+            output:
+              result: vars.total_chars
+          name: addChars
+
+        # aggiorna il longest
+        - if:
+            condition: "${vars.char_len > len(vars.longest)}"
+            then:
+              - set:
+                  path: vars.longest
+                  value: "${vars.current}"
+
+        # appende alla lista processed
+        - set:
+            path: vars.processed
+            value: "${list(vars.processed) + [{'original': vars.current, 'upper': vars.upper, 'length': vars.char_len}]}"
+
+  - map:
+      mappings:
+        - from: vars.processed
+          to: output.processed
+        - from: vars.total_chars
+          to: output.total_chars
+        - from: vars.longest
+          to: output.longest

@@ -1,0 +1,50 @@
+kind: flowservice
+id: test.ftp.downloadFile
+name: FTP Download File
+input:
+  remote_path:
+    type: string
+    required: true
+    description: Percorso del file su FTP
+  local_path:
+    type: string
+    required: true
+    description: Percorso locale dove salvare il file (es. /tmp/downloaded.csv)
+output:
+  success:
+    type: boolean
+  local_path:
+    type: string
+  message:
+    type: string
+pipeline:
+
+  - service:
+      id: common.services.ftp.download
+      input:
+        ftp_alias: "main_ftp"
+        remote_path: "${input.remote_path}"
+        local_path: "${input.local_path}"
+      output:
+        success: vars.success
+        local_path: vars.local_path
+    name: ftpDownload
+
+  - if:
+      condition: "${vars.success}"
+      then:
+        - map:
+            mappings:
+              - value: "Download completato"
+                to: output.message
+      else:
+        - throw:
+            code: "FTP_DOWNLOAD_FAILED"
+            message: "Download FTP fallito"
+
+  - map:
+      mappings:
+        - from: vars.success
+          to: output.success
+        - from: vars.local_path
+          to: output.local_path

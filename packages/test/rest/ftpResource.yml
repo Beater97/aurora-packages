@@ -1,0 +1,33 @@
+kind: rest_resource
+id: test.rest.ftp
+name: FTP Operations
+
+routes:
+  # GET /test/ftp/files?remote_path=/uploads
+  - method: GET
+    path: /test/ftp/files
+    flowservice: test.ftp.listFiles
+    input:
+      remote_path: request.query_params.remote_path
+    response:
+      status: 200
+
+  # POST /test/ftp/upload  body: { local_path, remote_path }
+  - method: POST
+    path: /test/ftp/upload
+    flowservice: test.ftp.uploadFile
+    input:
+      local_path: request.body.local_path
+      remote_path: request.body.remote_path
+    response:
+      status: 200
+
+  # POST /test/ftp/download  body: { remote_path, local_path }
+  - method: POST
+    path: /test/ftp/download
+    flowservice: test.ftp.downloadFile
+    input:
+      remote_path: request.body.remote_path
+      local_path: request.body.local_path
+    response:
+      status: 200

@@ -1,0 +1,52 @@
+kind: rest_resource
+id: test.rest.db
+name: Users DB — CRUD
+
+routes:
+  # GET /test/users?name_filter=...
+  - method: GET
+    path: /test/users
+    flowservice: test.db.queryUsers
+    input:
+      name_filter: request.query_params.name_filter
+    response:
+      status: 200
+
+  # GET /test/users/{id}
+  - method: GET
+    path: /test/users/{id}
+    flowservice: test.db.getUser
+    input:
+      id: request.path_params.id
+    response:
+      status: 200
+
+  # POST /test/users  body: { name, email }
+  - method: POST
+    path: /test/users
+    flowservice: test.db.createUser
+    input:
+      name: request.body.name
+      email: request.body.email
+    response:
+      status: 201
+
+  # PUT /test/users/{id}  body: { name?, email? }
+  - method: PUT
+    path: /test/users/{id}
+    flowservice: test.db.updateUser
+    input:
+      id: request.path_params.id
+      name: request.body.name
+      email: request.body.email
+    response:
+      status: 200
+
+  # DELETE /test/users/{id}
+  - method: DELETE
+    path: /test/users/{id}
+    flowservice: test.db.deleteUser
+    input:
+      id: request.path_params.id
+    response:
+      status: 200

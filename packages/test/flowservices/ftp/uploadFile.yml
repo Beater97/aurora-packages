@@ -1,0 +1,53 @@
+kind: flowservice
+id: test.ftp.uploadFile
+name: FTP Upload File
+description: >
+  Carica un file dal filesystem locale del server verso FTP.
+  local_path deve essere un percorso accessibile dall'engine (es. /tmp/report.csv).
+input:
+  local_path:
+    type: string
+    required: true
+    description: Percorso locale sul server (es. /tmp/export.csv)
+  remote_path:
+    type: string
+    required: true
+    description: Percorso di destinazione su FTP (es. /uploads/export.csv)
+output:
+  success:
+    type: boolean
+  remote_path:
+    type: string
+  message:
+    type: string
+pipeline:
+
+  - service:
+      id: common.services.ftp.upload
+      input:
+        ftp_alias: "main_ftp"
+        local_path: "${input.local_path}"
+        remote_path: "${input.remote_path}"
+      output:
+        success: vars.success
+        remote_path: vars.remote_path
+    name: ftpUpload
+
+  - if:
+      condition: "${vars.success}"
+      then:
+        - map:
+            mappings:
+              - value: "Upload completato"
+                to: output.message
+      else:
+        - throw:
+            code: "FTP_UPLOAD_FAILED"
+            message: "Upload FTP fallito"
+
+  - map:
+      mappings:
+        - from: vars.success
+          to: output.success
+        - from: vars.remote_path
+          to: output.remote_path
