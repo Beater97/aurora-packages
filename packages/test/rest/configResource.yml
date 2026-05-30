@@ -1,6 +1,10 @@
 kind: rest_resource
 id: test.rest.config
-method: GET
-path: /test/config
 name: Test Config Access
-flowservice: test.features.testConfig
+
+routes:
+  - method: GET
+    path: /test/config
+    flowservice: test.features.testConfig
+    response:
+      status: 200

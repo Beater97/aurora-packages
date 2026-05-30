@@ -1,10 +1,12 @@
 kind: rest_resource
-id: test.resources.testAll
+id: test.rest.testAll
 name: Test All Features
-method: POST
-path: /test/run
-flowservice: test.main.testAll
-input:
-  body: request.body
-response:
-  status: 200
+
+routes:
+  - method: POST
+    path: /test/run
+    flowservice: test.main.testAll
+    input:
+      body: request.body
+    response:
+      status: 200

@@ -1,11 +1,13 @@
 kind: rest_resource
-id: test.resources.timeout
+id: test.rest.timeout
 name: Test Step Timeout
-method: POST
-path: /test/timeout
-flowservice: test.features.testTimeout
-input:
-  sleep_seconds: request.body.sleep_seconds
-  timeout_seconds: request.body.timeout_seconds
-response:
-  status: 200
+
+routes:
+  - method: POST
+    path: /test/timeout
+    flowservice: test.features.testTimeout
+    input:
+      sleep_seconds: request.body.sleep_seconds
+      timeout_seconds: request.body.timeout_seconds
+    response:
+      status: 200

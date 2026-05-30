@@ -1,8 +1,12 @@
 kind: rest_resource
 id: test.rest.dlqTest
-method: POST
-path: /test/dlq-test
 name: Test DLQ Error Routing
-flowservice: test.features.testDlq
-input:
-  message: request.body.message
+
+routes:
+  - method: POST
+    path: /test/dlq-test
+    flowservice: test.features.testDlq
+    input:
+      message: request.body.message
+    response:
+      status: 200

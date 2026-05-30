@@ -1,7 +1,0 @@
-kind: rest_resource
-id: jsonplaceholderRest.rest.getPosts
-method: GET
-path: /posts
-flowservice: jsonplaceholderRest.flows.listPosts
-name: Fetch All Posts
-alias: jsonplaceholder

@@ -1,9 +1,13 @@
 kind: rest_resource
 id: test.rest.ssePublish
-method: POST
-path: /test/sse/publish
 name: Test SSE Publish Trigger
-flowservice: test.features.testSsePublish
-input:
-  message: request.body.message
-  channel: request.body.channel
+
+routes:
+  - method: POST
+    path: /test/sse/publish
+    flowservice: test.features.testSsePublish
+    input:
+      message: request.body.message
+      channel: request.body.channel
+    response:
+      status: 200
