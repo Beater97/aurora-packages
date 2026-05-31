@@ -24,7 +24,8 @@ pipeline:
 
   - parallel:
       branches:
-        - do:
+        - name: branchSum
+          do:
             - service:
                 id: common.services.math.add
                 input:
@@ -34,7 +35,8 @@ pipeline:
                   result: vars.sum
               name: calcSum
 
-        - do:
+        - name: branchProduct
+          do:
             - service:
                 id: common.services.math.multiply
                 input:
@@ -44,7 +46,8 @@ pipeline:
                   result: vars.product
               name: calcProduct
 
-        - do:
+        - name: branchDiff
+          do:
             - service:
                 id: common.services.math.subtract
                 input:
